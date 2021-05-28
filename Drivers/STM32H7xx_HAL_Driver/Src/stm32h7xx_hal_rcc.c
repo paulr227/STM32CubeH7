@@ -489,7 +489,13 @@ __weak HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruc
       /* Otherwise, just the calibration is allowed */
       else
       {
-        /* Adjusts the Internal High Speed oscillator (HSI) calibration value.*/
+    	  if ((temp_sysclksrc != RCC_CFGR_SWS_PLL1) || ((temp_pllckselr & RCC_PLLCKSELR_PLLSRC) != RCC_PLLCKSELR_PLLSRC_HSI))
+    	  {
+			/* Enable the Internal High Speed oscillator (HSI, HSIDIV2,HSIDIV4, or HSIDIV8) */
+			__HAL_RCC_HSI_CONFIG(RCC_OscInitStruct->HSIState);
+    	  }
+
+    	  /* Adjusts the Internal High Speed oscillator (HSI) calibration value.*/
         __HAL_RCC_HSI_CALIBRATIONVALUE_ADJUST(RCC_OscInitStruct->HSICalibrationValue);
       }
     }
